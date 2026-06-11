@@ -1,13 +1,17 @@
 ---
 name: lovdata
-description: Look up Norwegian laws (gjeldende lover) using Lovdata's public data. Search by title or full text, read specific laws or sections, and list the structure of any law. Use when the user asks about Norwegian legislation, specific law paragraphs, or legal questions about Norway.
+description: Look up Norwegian laws (gjeldende lover) and court decisions (rettsavgjoerelser/dommer) using Lovdata's public data and rettspraksis.no. Search by title or full text, read specific laws or sections, list the structure of any law, search and read court decisions. Use when the user asks about Norwegian legislation, specific law paragraphs, court cases, or legal questions about Norway.
 ---
 
-# Lovdata - Norwegian Law Lookup
+# Lovdata - Norwegian Law and Case Law Lookup
 
 Search and read all current Norwegian laws using Lovdata's publicly available
 dataset (NLOD 2.0 license). The data contains 741 laws in structured HTML/XML
 format, sourced from https://api.lovdata.no/v1/publicData/get/gjeldende-lover.tar.bz2.
+
+Search and read court decisions (rettsavgjoerelser) from rettspraksis.no, an
+open archive of Norwegian court decisions with full text. Browse recent decisions
+via the Lovdata register.
 
 The pre-built index lives in [references/index.tsv](references/index.tsv).
 The extracted law XML files live in `data/nl/`.
@@ -89,7 +93,52 @@ All scripts accept flexible identifiers:
 | Avhendingslova | `lov/1992-07-03-93` |
 | Skadeerstatningsloven | `lov/1969-06-13-26` |
 
+### Search court decisions
+
+Search rettspraksis.no for court decisions by topic:
+
+```bash
+./scripts/search-decisions.sh "rassikring"
+./scripts/search-decisions.sh --max 50 "rasfare"
+./scripts/search-decisions.sh "naturskade ras"
+./scripts/search-decisions.sh "skredfare eiendom"
+```
+
+### Read a court decision
+
+Read the full text of a decision from rettspraksis.no:
+
+```bash
+./scripts/read-decision.sh "HR-2016-1440-A"
+./scripts/read-decision.sh "LA-1999-167" --summary
+./scripts/read-decision.sh "Rt-1997-550"
+./scripts/read-decision.sh "LG-1993-502" --section 5
+```
+
+Case ID formats:
+- `HR-YYYY-NNNN-A/S/U` -- Hoyesterett (2008+)
+- `Rt-YYYY-PAGE` -- Hoyesterett (pre-2008, Rettstidende)
+- `LA/LB/LE/LF/LG/LH-YYYY-NNNNN` -- Lagmannsrettene
+- `RG-YYYY-PAGE` -- Rettens Gang (older collection)
+- `T*-YYYY-NNNNN` -- Tingrettene
+
+### Browse recent decisions
+
+Browse the Lovdata register for recent decisions with summaries:
+
+```bash
+./scripts/browse-decisions.sh
+./scripts/browse-decisions.sh --court HRA
+./scripts/browse-decisions.sh --court LRA --offset 20
+```
+
+Courts: `HRA` (Hoyesterett), `LRA` (alle lagmannsretter), `LAA` (Agder),
+`LBA` (Borgarting), `LEA` (Eidsivating), `LFRA` (Frostating), `LGA` (Gulating),
+`LHA` (Haalogaland), `TRA` (tingrettene), `JSR` (jordskifterettene).
+
 ## Workflow
+
+### For law questions
 
 1. If the user asks about a specific law or topic, first **search** for it.
 2. Then **list sections** to understand the law's structure.
@@ -98,6 +147,17 @@ All scripts accept flexible identifiers:
    (e.g. "straffeloven $ 371") and note that this is the current consolidated
    version from Lovdata's public dataset.
 5. Do not invent or hallucinate legal text. If a section is not found, say so.
+
+### For court decisions
+
+1. **Search** rettspraksis.no for relevant decisions using topic keywords.
+2. Try multiple related search terms (e.g. "rassikring", "rasfare",
+   "skredfare", "naturskade ras") since the full-text search is literal.
+3. **Read** the summary first (`--summary`) to check relevance.
+4. **Read** the full text of relevant decisions.
+5. Always cite the case ID (e.g. "Rt-1997-550", "HR-2016-1440-A").
+6. Note that rettspraksis.no is a community archive and may not have all
+   decisions. For the very latest decisions, **browse** the Lovdata register.
 
 ## Data refresh
 
