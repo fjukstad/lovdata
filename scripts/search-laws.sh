@@ -58,8 +58,18 @@ else
         title=$(rg "^${basename}" "$INDEX_FILE" 2>/dev/null | cut -f5)
         echo ""
         echo "--- $basename: $title ---"
-        # Show matching paragraph context. Extract readable text around matches.
-        # Use rg to find matches with byte offset context, limit output.
-        rg -o ".{0,80}${QUERY}.{0,80}" "$filepath" -i 2>/dev/null | head -3
+        # Show matching context with HTML stripped via python
+        rg -o ".{0,200}${QUERY}.{0,200}" "$filepath" -i 2>/dev/null \
+            | head -3 \
+            | python3 -c "
+import sys, re, html
+for line in sys.stdin:
+    clean = re.sub(r'<[^>]*>', '', line)
+    clean = re.sub(r'[a-z]+-[0-9]+-[a-z]+-[0-9]+[-a-z0-9]*', '', clean)
+    clean = html.unescape(clean).strip()
+    if len(clean) > 200:
+        clean = clean[:200]
+    print('  ' + clean)
+"
     done
 fi

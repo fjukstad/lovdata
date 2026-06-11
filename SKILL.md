@@ -72,6 +72,8 @@ All scripts accept flexible identifiers:
 
 | Law | refID |
 |-----|-------|
+| Grunnloven | `lov/1814-05-17` |
+| Grannelova (naboloven) | `lov/1961-06-16-15` |
 | Straffeloven | `lov/2005-05-20-28` |
 | Straffeprosessloven | `lov/1981-05-22-25` |
 | Arbeidsmiljoeloven | `lov/2005-06-17-62` |
@@ -81,7 +83,11 @@ All scripts accept flexible identifiers:
 | Aksjeloven | `lov/1997-06-13-44` |
 | Skatteloven | `lov/1999-03-26-14` |
 | Personopplysningsloven | `lov/2018-06-15-38` |
-| Grunnloven | `lov/1814-05-17` |
+| Naturskadeloven | `lov/1994-03-25-7` |
+| Naturskadeerstatningsloven | `lov/2014-08-15-59` |
+| Husleieloven | `lov/1999-03-26-17` |
+| Avhendingslova | `lov/1992-07-03-93` |
+| Skadeerstatningsloven | `lov/1969-06-13-26` |
 
 ## Workflow
 

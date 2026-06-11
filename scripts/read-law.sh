@@ -124,7 +124,7 @@ if section_filter:
     pattern = rf'data-name=\"{re.escape(section_filter)}\"[^>]*>(.*?)(?=<(?:section|article) [^>]*data-name=|</section>|</main>|</body>)'
     match = re.search(pattern, content, re.DOTALL)
     if match:
-        content = match.group(0)
+        content = match.group(1)
     else:
         # Try matching section/article with the name in the text
         pattern = rf'(?:<section|<article)[^>]*>(?:(?!</section>|</article>).)*?{re.escape(section_filter)}.*?(?:</section>|</article>)'
